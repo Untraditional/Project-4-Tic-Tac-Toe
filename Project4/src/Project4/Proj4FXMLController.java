@@ -6,34 +6,30 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 
-/**
- * FXML Controller class
- *
- * @author dhall
- */
+
 public class Proj4FXMLController implements Initializable {
 
     @FXML
-    private ToggleButton m00;
+    private Button m00;
     @FXML
-    private ToggleButton m01;
+    private Button m01;
     @FXML
-    private ToggleButton m02;
+    private Button m02;
     @FXML
-    private ToggleButton m10;
+    private Button m10;
     @FXML
-    private ToggleButton m11;
+    private Button m11;
     @FXML
-    private ToggleButton m12;
+    private Button m12;
     @FXML
-    private ToggleButton m20;
+    private Button m20;
     @FXML
-    private ToggleButton m21;
+    private Button m21;
     @FXML
-    private ToggleButton m22;
+    private Button m22;
     @FXML
     private Label lblWinner;
 
@@ -45,12 +41,20 @@ public class Proj4FXMLController implements Initializable {
 
     @FXML
     private void handleCLick(ActionEvent event) {
-        if(m00.isSelected()){
+        if (m00.getText().equals("")) {
             m00.setText("X");
-        }
-        if(m01.isSelected()){
+        } 
+        else if (m01.getText().equals("")) {
             m01.setText("O");
         }
+        else if (m02.getText().equals("") ) {
+            m02.setText("O");
+        }
+        
+    }
+    
+    private boolean winnerCheck(){
+        return true;
     }
     
 }
