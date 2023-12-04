@@ -1,4 +1,3 @@
-
 package proj4;
 
 import java.net.URL;
@@ -13,23 +12,7 @@ import javafx.scene.control.Label;
 public class Proj4FXMLController implements Initializable {
 
     @FXML
-    private Button m00;
-    @FXML
-    private Button m01;
-    @FXML
-    private Button m02;
-    @FXML
-    private Button m10;
-    @FXML
-    private Button m11;
-    @FXML
-    private Button m12;
-    @FXML
-    private Button m20;
-    @FXML
-    private Button m21;
-    @FXML
-    private Button m22;
+    private Button m00,m01,m02,m10,m11,m12,m20,m21,m22;
     @FXML
     private Label lblWinner;
 
@@ -41,20 +24,22 @@ public class Proj4FXMLController implements Initializable {
 
     @FXML
     private void handleCLick(ActionEvent event) {
-        if (m00.getText().equals("")) {
-            m00.setText("X");
-        } 
-        else if (m01.getText().equals("")) {
-            m01.setText("O");
+        //currently psuedocode
+        if(player1 && Button clickedButton = (Button) event.getSource()){
+            button.setText("X");
         }
-        else if (m02.getText().equals("") ) {
-            m02.setText("O");
-        }
+        //about the same for player2's turn but with "O"'s
+        
         
     }
     
+    //Also still psuedocode, but just throwing ideas out
+    //maybe not use boolean? 
+    //just check and output winner to the GUI
     private boolean winnerCheck(){
-        return true;
+        if(m00,m01,m02 == "X")
+            
+        return false;
+        
     }
-    
 }
