@@ -73,18 +73,27 @@ public class Proj4_ClientUIController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    private void processServerMessage(String message) {
+    
+    private void processServerMessage(String message) {       
         if (message.startsWith("WINNER")) {
+            //update the status label with the winner's name, extracted from the message
             lblStatus.setText("Winner: " + message.split(":")[1]);
             disableAllButtons();
-        } else if (message.contains(":")) {
+        } 
+        // Check if the message contains a colon, indicating a game move
+        else if (message.contains(":")) {
+            // Split the message into parts using the colon as a delimiter
             String[] parts = message.split(":");
+             // The first part is the ID of the button to update
             String buttonId = parts[0];
+             // The second part is the symbol (X or O) to set on the button
             String symbol = parts[1];
+            // Retrieve the button by its ID
             Button buttonToUpdate = getButtonById(buttonId);
             if (buttonToUpdate != null) {
+                // Update the text of the button with the symbol
                 buttonToUpdate.setText(symbol);
+                 // Determine if it's the player's turn by checking if the symbol is not the player's symbol
                 myTurn = !symbol.equals(playerSymbol); // It's my turn if the last move wasn't mine
             }
         }
