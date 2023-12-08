@@ -63,8 +63,9 @@ public class Proj4_Server {
                 // Broadcast the assigned mark to all clients
                 broadcast(playerSymbol + " has joined the game", this);
 
-                String message;
-                while ((message = reader.readLine()) != null) {                    
+                String message = reader.readLine();
+                while (message != null) {  
+                    System.out.println("Received message from player " + playerSymbol + ": " + message);
                     broadcast(message, this);
                 }
             } catch (IOException e) {
