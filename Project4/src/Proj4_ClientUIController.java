@@ -30,10 +30,7 @@ public class Proj4_ClientUIController implements Initializable {
 
     private static final int PORT = 5454;
     private static final String IP = "localhost";
-    @FXML
-    private Label lblPlayerSym;
-    @FXML
-    private Label lblWinner;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
