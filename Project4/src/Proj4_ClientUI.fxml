@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.ProgressIndicator?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="new_proj4.Proj4_ClientUIController">
-   <children>
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Proj4_ClientUIController">
+    <children>
       <Button fx:id="btn01" layoutX="270.0" layoutY="170.0" mnemonicParsing="false" onAction="#sendMoveHandler" prefHeight="60.0" prefWidth="60.0">
          <font>
             <Font size="28.0" />
@@ -58,7 +57,6 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Label fx:id="lblPlayerSym" layoutX="242.0" layoutY="67.0" text="You are: " />
-      <Label fx:id="lblWinner" layoutX="286.0" layoutY="130.0" />
+      <Label fx:id="lblStatus" layoutX="50.0" layoutY="350.0" text="Status" />
    </children>
 </AnchorPane>
