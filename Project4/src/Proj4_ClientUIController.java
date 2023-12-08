@@ -1,4 +1,3 @@
-
 package new_proj4;
 
 import java.io.BufferedReader;
@@ -8,9 +7,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +17,9 @@ import javafx.scene.control.Label;
 public class Proj4_ClientUIController implements Initializable {
 
     @FXML
-    private Button btn00,btn01,btn02,btn10,btn11,btn12,btn20,btn21,btn22;
+    private Button btn00,btn01,btn02,
+            btn10,btn11,btn12,
+            btn20,btn21,btn22;
     @FXML
     private Label lblPlayerSym;
     @FXML
@@ -35,16 +33,19 @@ public class Proj4_ClientUIController implements Initializable {
     
     private static final int PORT = 5454;
     private static final String IP = "localhost";
-
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO: Initialize the socket connection here
         try {
             // Replace "localhost" and 12345 with your server's address and port
-            socket = new Socket(IP, 5454);
+            socket = new Socket(IP, PORT);
             writer = new PrintWriter(socket.getOutputStream(), true);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            
+            String message = reader.readLine();            
+            lblPlayerSym.setText(message);
 
             // Start a separate thread to listen for messages from the server
             new Thread(this::receiveMessages).start();
@@ -54,27 +55,35 @@ public class Proj4_ClientUIController implements Initializable {
     }    
 
     @FXML
-    private void sendMoveHandler(ActionEvent event) {
-        try {
-            String message = reader.readLine();
-            lblPlayerSym.setText("You are: " + message);
-            
+    private void sendMoveHandler(ActionEvent event) throws IOException {
+        clickedButton = (Button) event.getSource();
+        if(clickedButton.getText().equals("")){
+            //   You are player X
+            String move = lblPlayerSym.getText().substring(15,16);
+            clickedButton.setText(move);
+            writer.println(move);
+        }
+        
+        
+        /*
+        try {            
             clickedButton = (Button) event.getSource();
             String move;
-            
-            if (clickedButton.getText().equals("") && lblPlayerSym.getText().equals("X")) {
+            clickedButton.setText("X");
+            if (lblPlayerSym.getText().equals("X")) {
                 clickedButton.setText("X");
                 move = clickedButton.getText();
                 writer.println(move);                
             } 
-            else if (clickedButton.getText().equals("") && lblPlayerSym.getText().equals("O")) {
+            else if (lblPlayerSym.getText().equals("O")) {
                 clickedButton.setText("O");
                 move = clickedButton.getText();
                 writer.println(move);                
             }            
+            throw new IOException("Simulating IOException");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
     
     private void receiveMessages() {
@@ -82,22 +91,27 @@ public class Proj4_ClientUIController implements Initializable {
             String message;
             while ((message = reader.readLine()) != null) {
                 // Update the UI with the received message
-                appendMessage(message);
+                if(lblPlayerSym.getText().equals("X")){
+                    clickedButton.setText("X");
+                }
+                else if(lblPlayerSym.getText().equals("O")){
+                    clickedButton.setText("O");
+                }                
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+    /*
     private void appendMessage(String message) {
         // Update the UI with the received message
         
-        lblPlayerSym.setText(message);
-        if(message == "X"){
+        //lblPlayerSym.setText(message);
+        if(message.equals("X")){
             clickedButton.setText("X");
         }
-        else if(message == "O"){
+        else if(message.equals("O")){
             clickedButton.setText("O");
         }    
-    }    
+    }*/
 }
