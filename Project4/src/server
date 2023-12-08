@@ -85,6 +85,13 @@ public class server {
             }
         }
 
+        /*
+        Take message from clients, 
+        parse move and update gameboard, 
+        broadcast move to all clients. 
+        Check for winner, 
+        if there is a winner broadcast winner or brodcast draw if it is a draw 
+        */
         private void processMove(String inputLine) {
             String[] parts = inputLine.split(":");
             if (parts.length == 2) {
@@ -114,24 +121,25 @@ public class server {
         }
 
         private String checkForWinner() {
-            // Check rows, columns, and diagonals for a win
             for (int i = 0; i < 3; i++) {
-                
+                // Check each row for a win
                 if (!gameBoard[i][0].equals(" ") && gameBoard[i][0].equals(gameBoard[i][1]) && gameBoard[i][1].equals(gameBoard[i][2]))
                     return gameBoard[i][0];
+                // Check each column for a win
                 if (!gameBoard[0][i].equals(" ") && gameBoard[0][i].equals(gameBoard[1][i]) && gameBoard[1][i].equals(gameBoard[2][i]))
                     return gameBoard[0][i];
             }
-
+            // Check the first diagonal (top-left to bottom-right) for a win
             if (!gameBoard[0][0].equals(" ") && gameBoard[0][0].equals(gameBoard[1][1]) && gameBoard[1][1].equals(gameBoard[2][2]))
                 return gameBoard[0][0];
+            // Check the second diagonal (top-right to bottom-left) for a win
             if (!gameBoard[0][2].equals(" ") && gameBoard[0][2].equals(gameBoard[1][1]) && gameBoard[1][1].equals(gameBoard[2][0]))
                 return gameBoard[0][2];
 
             return " "; // No winner yet
         }
         
-        // send draw message to server for broadcast
+        // send 'draw' message to server for broadcast
         private void broadcastDraw(){
             for (GameClientHandler client : clients) {
                 client.writer.println("It's a draw!");
