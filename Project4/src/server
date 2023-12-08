@@ -15,7 +15,7 @@ public class server {
     private static final Set<GameClientHandler> clients = new HashSet<>();
     private static final String[][] gameBoard = new String[3][3];
     private static final String[] playerSymbols = {"X", "O"};
-    private static int currentPlayerIndex = 0
+    private static int currentPlayerIndex = 0;
     private static int movesMade = 0; // keep track of moves to check for draw
 
     public static void main(String[] args) {
@@ -30,6 +30,13 @@ public class server {
                 GameClientHandler clientHandler = new GameClientHandler(clientSocket, playerSymbols[currentPlayerIndex]);
                 clients.add(clientHandler);
                 new Thread(clientHandler).start();
+                
+                // notify clients the game is ready
+                if(clients.size() == 2){
+                    for (GameClientHandler client : clients) {
+                        client.writer.println("Game is ready!");
+                    }
+                }
 
                 currentPlayerIndex = (currentPlayerIndex + 1) % playerSymbols.length;
             }
@@ -37,6 +44,7 @@ public class server {
             e.printStackTrace();
         }
     }
+    
 
     private static void initializeGameBoard() {
         for (int i = 0; i < 3; i++) {
@@ -73,20 +81,12 @@ public class server {
                 e.printStackTrace();
             } finally {
                 clients.remove(this);
-                closeConnection();
+                
             }
         }
 
-        /*
-        Take message from clients, 
-        parse move and update gameboard, 
-        broadcast move to all clients. 
-        Check for winner, 
-        if there is a winner broadcast winner or brodcast draw if it is a draw 
-        */
         private void processMove(String inputLine) {
             String[] parts = inputLine.split(":");
-            
             if (parts.length == 2) {
                 String buttonId = parts[0];
                 String symbol = parts[1];
@@ -97,14 +97,11 @@ public class server {
                 String winner = checkForWinner();
                 if (!winner.equals(" ")) {
                     broadcastWinner(winner);
-                    closeAllConnections();
                 }
-
                 // check if winner returns no winner, 
                 // and check that all possible moves have been made
                 else if(winner.equals(" ") && movesMade == 9){
                     broadcastDraw();
-                    closeAllConnections();
                 }
             }
         }
@@ -117,25 +114,24 @@ public class server {
         }
 
         private String checkForWinner() {
+            // Check rows, columns, and diagonals for a win
             for (int i = 0; i < 3; i++) {
-                // Check each row for a win: all three cells in a row must be equal and not empty
+                
                 if (!gameBoard[i][0].equals(" ") && gameBoard[i][0].equals(gameBoard[i][1]) && gameBoard[i][1].equals(gameBoard[i][2]))
                     return gameBoard[i][0];
-                // Check each column for a win: all three cells in a column must be equal and not empty
                 if (!gameBoard[0][i].equals(" ") && gameBoard[0][i].equals(gameBoard[1][i]) && gameBoard[1][i].equals(gameBoard[2][i]))
                     return gameBoard[0][i];
             }
-            // Check the first diagonal (top-left to bottom-right) for a win
+
             if (!gameBoard[0][0].equals(" ") && gameBoard[0][0].equals(gameBoard[1][1]) && gameBoard[1][1].equals(gameBoard[2][2]))
                 return gameBoard[0][0];
-            // Check the second diagonal (top-right to bottom-left) for a win
             if (!gameBoard[0][2].equals(" ") && gameBoard[0][2].equals(gameBoard[1][1]) && gameBoard[1][1].equals(gameBoard[2][0]))
                 return gameBoard[0][2];
 
             return " "; // No winner yet
         }
-            
-        // send 'draw' message to server for broadcast
+        
+        // send draw message to server for broadcast
         private void broadcastDraw(){
             for (GameClientHandler client : clients) {
                 client.writer.println("It's a draw!");
@@ -151,20 +147,6 @@ public class server {
         private void broadcastMove(String buttonId, String symbol) {
             for (GameClientHandler client : clients) {
                 client.writer.println(buttonId + ":" + symbol);
-            }
-        }
-
-        private void closeConnection() {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void closeAllConnections() {
-            for (GameClientHandler client : clients) {
-                client.closeConnection();
             }
         }
     }
